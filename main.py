@@ -4,6 +4,8 @@ import json
 import os
 from datetime import datetime
 
+# TODO: add location guessing game
+
 app = FastAPI()
 param = "-n" if os.name == "nt" else "-c"
 
@@ -79,8 +81,19 @@ def where_is_bro():
     return "at home, probably online"
 
 
+@app.get("/yap")
+def get():
+    with open("yap.json", "r") as file:
+        data = json.load(file)
+        yap = data[2]  # replace with random yap soon
+    return {"yap:": f"{yap}"}
+
+
 @app.post("/yap")
-def submit_yap(yap_submission):
+def submit_yap(yap_submission: str):
+    with open("yap.json", "r") as file:
+        data = json.load(file)
+        data.append(yap_submission)
     with open("yap.json", "w") as file:
-        json.dump(yap_submission, file)
-    return {"message": "post malone"}
+        json.dump(data, file)
+    return {"message": "yap submitted"}
