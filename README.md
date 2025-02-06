@@ -1,5 +1,5 @@
 # api
-This is an API designed for [RaspApi](https://raspapi.hackclub.com/). It is built in FastAPI and hosted somewhere, i hope
+This is an API designed for [RaspApi](https://raspapi.hackclub.com/). It is built in FastAPI and hosted [here.](sreekar617-api.vercel.app)
 ## Usage
 | Relative Path | Method     | Parameters                                                                                                    | Returns |
 | ------------- | ------ | ---------- | ------------------------------------------------------------------------------------------------------------- |
@@ -8,8 +8,9 @@ This is an API designed for [RaspApi](https://raspapi.hackclub.com/). It is buil
 | /where                     | GET          | none                 | Checks a schedule to determine my status and where I am (home, school, sleep).                                                                                                                                             |
 | /yap                       | GET          | none                 | Gets a random text submission and returns it.                                                                                                                                                                              |
 | /yap                       | POST         | yap_submission="str" | Submits a string to the database, for someone to read with a GET request                                                                                                                                                   |
-| /grades                    | GET          | none                 | Checks my grades through the StudentVue API in a fast and elegant manner (i'm not bragging trust)                                                                                                                          |
+| /grades                    | GET          | none                 | Checks my grades through the StudentVue API in a fast and elegant manner (i'm not bragging trust). **May time out occasionally while grades are being fetched. In this case, just try the request again**                  |
 | /grades                    | POST         | user="str"<br>password="str" | Takes a username and password, and uses them to return your grades in a fraction of the time StudentVue takes                                                                                                    |
+
 Further documentation can be found on the root directory of the API (/)
 ## Examples and further usage
 
