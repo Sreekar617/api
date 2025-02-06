@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.responses import PlainTextResponse
-from typing import Union
+from scalar_fastapi import get_scalar_api_reference
+
+# from typing import Union
 import json
 import os
 from datetime import datetime
@@ -12,14 +14,22 @@ from studentvue import StudentVue
 app = FastAPI()
 param = "-n" if os.name == "nt" else "-c"
 sv = StudentVue(
-    ">REDACTED",
-    ">REDACTED",
+    "user",
+    "pass",
     "https://mn-mvps-psv.edupoint.com/PXP2_Login_Student.aspx",
 )
 
 
+@app.get("/")
+def root():
+    return get_scalar_api_reference(
+        openapi_url=app.openapi_url,
+        title=app.title,
+    )
+
+
 @app.get("/jfin")
-def ping_jfin():
+def ping_jellyfin():
     response = os.system(f"ping {param} 1 127.0.0.1")
     if response == 0:
         return "my jellyfin server is up!"
@@ -28,7 +38,7 @@ def ping_jfin():
 
 
 @app.get("/time")
-def return_time():
+def return_current_time():
     current_time = datetime.now()
     if current_time.strftime("%H:%M") == "7:00":
         return "IT'S 7:00!"
@@ -90,7 +100,7 @@ def where_is_bro():
 
 
 @app.get("/yap")
-def get():
+def get_random_yap():
     with open("yap.json", "r") as file:
         data = json.load(file)
         yap = random.choice(data)
@@ -98,10 +108,10 @@ def get():
 
 
 @app.get("/grades", response_class=PlainTextResponse)
-def get_grades():
+def get_my_grades():
     sv = StudentVue(
-        "sigmauser",
-        "massivepassword",
+        "user",
+        "pass",
         "https://mn-mvps-psv.edupoint.com/PXP2_Login_Student.aspx",
     )
     grades = sv.get_gradebook()
@@ -114,7 +124,7 @@ def get_grades():
 
 
 @app.post("/grades", response_class=PlainTextResponse)
-def get_other_grades(user: str, password: str):
+def get_your_grades(user: str, password: str):
     sv = StudentVue(
         user,
         password,
