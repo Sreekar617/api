@@ -1,13 +1,21 @@
 from fastapi import FastAPI
+from fastapi.responses import PlainTextResponse
 from typing import Union
 import json
 import os
 from datetime import datetime
+import random
+from studentvue import StudentVue
 
 # TODO: add location guessing game
 
 app = FastAPI()
 param = "-n" if os.name == "nt" else "-c"
+sv = StudentVue(
+    ">REDACTED",
+    ">REDACTED",
+    "https://mn-mvps-psv.edupoint.com/PXP2_Login_Student.aspx",
+)
 
 
 @app.get("/jfin")
@@ -85,8 +93,40 @@ def where_is_bro():
 def get():
     with open("yap.json", "r") as file:
         data = json.load(file)
-        yap = data[2]  # replace with random yap soon
+        yap = random.choice(data)
     return {"yap:": f"{yap}"}
+
+
+@app.get("/grades", response_class=PlainTextResponse)
+def get_grades():
+    sv = StudentVue(
+        "sigmauser",
+        "massivepassword",
+        "https://mn-mvps-psv.edupoint.com/PXP2_Login_Student.aspx",
+    )
+    grades = sv.get_gradebook()
+    grades = grades["Gradebook"]["Courses"]["Course"]
+    response = ""
+    for key in grades:
+        response += f"\nPeriod {key["@Period"]}: {key["@CourseName"]} with {key["@Staff"]}. Grade: {key["Marks"]["Mark"]["@CalculatedScoreRaw"]} ({key["Marks"]["Mark"]["@CalculatedScoreString"]})"
+    print(response)
+    return response
+
+
+@app.post("/grades", response_class=PlainTextResponse)
+def get_other_grades(user: str, password: str):
+    sv = StudentVue(
+        user,
+        password,
+        "https://mn-mvps-psv.edupoint.com/PXP2_Login_Student.aspx",
+    )
+    grades = sv.get_gradebook()
+    grades = grades["Gradebook"]["Courses"]["Course"]
+    response = ""
+    for key in grades:
+        response += f"\nPeriod {key["@Period"]}: {key["@CourseName"]} with {key["@Staff"]}. Grade: {key["Marks"]["Mark"]["@CalculatedScoreRaw"]} ({key["Marks"]["Mark"]["@CalculatedScoreString"]})"
+    print(response)
+    return response
 
 
 @app.post("/yap")
