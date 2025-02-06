@@ -10,7 +10,7 @@ This is an API designed for [RaspApi](https://raspapi.hackclub.com/). It is buil
 | /yap                       | POST         | yap_submission="str" | Submits a string to the database, for someone to read with a GET request                                                                                                                                                   |
 | /grades                    | GET          | none                 | Checks my grades through the StudentVue API in a fast and elegant manner (i'm not bragging trust)                                                                                                                          |
 | /grades                    | POST         | user="str"<br>password="str" | Takes a username and password, and uses them to return your grades in a fraction of the time StudentVue takes                                                                                                    |
-
+Further documentation can be found on the root directory of the API (/)
 ## Examples and further usage
 
 ```
